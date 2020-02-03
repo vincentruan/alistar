@@ -11,7 +11,6 @@ export function getList(params) {
   })
 }
 
-
 export function save(params) {
   return request({
     url: '/banner',

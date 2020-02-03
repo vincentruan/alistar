@@ -7,7 +7,7 @@ export default {
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!isvalidUsername(value)) {
-        callback(new Error(this.$t('login.errorAccount') ))
+        callback(new Error(this.$t('login.errorAccount')))
       } else {
         callback()
       }
@@ -30,17 +30,17 @@ export default {
       },
       loading: false,
       pwdType: 'password',
-      redirect:'/'
+      redirect: '/'
     }
   },
-  mounted(){
+  mounted() {
     this.init()
   },
   methods: {
-    init(){
-      let redirect = this.$route.query.redirect
-      console.log('redirect',redirect)
-      if(redirect){
+    init() {
+      const redirect = this.$route.query.redirect
+      console.log('redirect', redirect)
+      if (redirect) {
         this.redirect = redirect
       }
     },

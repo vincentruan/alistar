@@ -136,10 +136,10 @@ export default {
             type: 'success'
           })
           this.fetchData()
-        }).catch(err =>{
+        }).catch(err => {
           this.$notify.error({
             title: '错误',
-            message:err,
+            message: err
           })
         })
       })

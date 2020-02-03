@@ -8,14 +8,14 @@ export default {
       formTitle: '添加消息模板',
       isAdd: true,
       form: {
-        code:'',
-        title:'',
-        content:'',
-        cond:'',
-        idMessageSender:'',
+        code: '',
+        title: '',
+        content: '',
+        cond: '',
+        idMessageSender: '',
         id: ''
       },
-      sendList:[],
+      sendList: [],
       listQuery: {
         page: 1,
         limit: 20,
@@ -39,7 +39,7 @@ export default {
   },
   computed: {
 
-    //表单验证
+    // 表单验证
     rules() {
       return {
         // cfgName: [
@@ -102,11 +102,11 @@ export default {
     },
     resetForm() {
       this.form = {
-        code:'',
-        title:'',
-        content:'',
-        cond:'',
-        idMessageSender:'',
+        code: '',
+        title: '',
+        content: '',
+        cond: '',
+        idMessageSender: '',
         id: ''
       }
     },
@@ -120,11 +120,11 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           save({
-      code:this.form.code,
-      title:this.form.title,
-      content:this.form.content,
-      cond:this.form.cond,
-      idMessageSender:this.form.idMessageSender,
+            code: this.form.code,
+            title: this.form.title,
+            content: this.form.content,
+            cond: this.form.cond,
+            idMessageSender: this.form.idMessageSender,
             id: this.form.id
           }).then(response => {
             this.$message({

@@ -1,7 +1,7 @@
 
 import store from '@/store'
 
-export default{
+export default {
   inserted(el, binding, vnode) {
     const { value } = binding
     const permissions = store.getters && store.getters.permissions

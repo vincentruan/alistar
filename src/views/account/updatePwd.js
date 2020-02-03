@@ -27,11 +27,11 @@ export default {
     this.init()
   },
   methods: {
-    init(){
+    init() {
       this.user = this.$store.state.user.profile
     },
-    handleClick(tab, event){
-      this.$router.push({ path: '/account/'+tab.name})
+    handleClick(tab, event) {
+      this.$router.push({ path: '/account/' + tab.name })
     },
     updatePwd() {
       this.$refs['form'].validate((valid) => {
