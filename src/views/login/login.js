@@ -59,6 +59,9 @@ export default {
             this.loading = false
             this.$router.push({ path: this.redirect })
           }).catch((err) => {
+            if (err) {
+              console.log(err.stack)
+            }
             this.loading = false
           })
         } else {
