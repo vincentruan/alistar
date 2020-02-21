@@ -1,5 +1,8 @@
 <template>
-  <div class="login-container" style=" background-image: url(/img/bg.jpg);">
+  <div
+    class="login-container"
+    style=" background-image: url(/img/bg.jpg);"
+  >
     <el-form
       ref="loginForm"
       :model="loginForm"
@@ -9,7 +12,9 @@
       label-position="left"
     >
       <div class="title-container">
-        <h3 class="title">{{ $t('login.title') }}</h3>
+        <h3 class="title">
+          {{ $t('login.title') }}
+        </h3>
         <lang-select class="set-language" />
       </div>
 
@@ -31,14 +36,17 @@
           <svg-icon icon-class="password" />
         </span>
         <el-input
-          :type="pwdType"
           v-model="loginForm.password"
+          :type="pwdType"
           :placeholder="$t('login.password')"
           name="password"
           auto-complete="on"
           @keyup.enter.native="handleLogin"
         />
-        <span class="show-pwd" @click="showPwd">
+        <span
+          class="show-pwd"
+          @click="showPwd"
+        >
           <svg-icon icon-class="eye" />
         </span>
       </el-form-item>
@@ -48,7 +56,9 @@
         type="primary"
         style="width:100%;margin-bottom:30px;"
         @click.native.prevent="handleLogin"
-      >{{ $t('login.logIn') }}</el-button>
+      >
+        {{ $t('login.logIn') }}
+      </el-button>
 
       <div style="position:relative">
         <div class="tips">

@@ -3,9 +3,30 @@
     <div class="block">
       <el-row>
         <el-col :span="24">
-          <el-button type="success" size="mini" icon="el-icon-plus" @click.native="add">{{ $t('button.add') }}</el-button>
-          <el-button type="primary" size="mini" icon="el-icon-edit" @click.native="edit">{{ $t('button.edit') }}</el-button>
-          <el-button type="danger" size="mini" icon="el-icon-delete" @click.native="remove">{{ $t('button.delete') }}</el-button>
+          <el-button
+            type="success"
+            size="mini"
+            icon="el-icon-plus"
+            @click.native="add"
+          >
+            {{ $t('button.add') }}
+          </el-button>
+          <el-button
+            type="primary"
+            size="mini"
+            icon="el-icon-edit"
+            @click.native="edit"
+          >
+            {{ $t('button.edit') }}
+          </el-button>
+          <el-button
+            type="danger"
+            size="mini"
+            icon="el-icon-delete"
+            @click.native="remove"
+          >
+            {{ $t('button.delete') }}
+          </el-button>
         </el-col>
       </el-row>
     </div>
@@ -63,31 +84,52 @@
       :visible.sync="formVisible"
       width="70%"
     >
-      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+      <el-form
+        ref="form"
+        :model="form"
+        :rules="rules"
+        label-width="120px"
+      >
         <el-row>
           <el-col :span="12">
             <el-form-item label="编号">
-              <el-input v-model="form.code" minlength="1" />
+              <el-input
+                v-model="form.code"
+                minlength="1"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="标题">
-              <el-input v-model="form.title" minlength="1" />
+              <el-input
+                v-model="form.title"
+                minlength="1"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="内容">
-              <el-input v-model="form.content" minlength="1" />
+              <el-input
+                v-model="form.content"
+                minlength="1"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="发送条件">
-              <el-input v-model="form.cond" minlength="1" />
+              <el-input
+                v-model="form.cond"
+                minlength="1"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="发送器">
-              <el-select v-model="form.idMessageSender" filterable placeholder="请选择">
+              <el-select
+                v-model="form.idMessageSender"
+                filterable
+                placeholder="请选择"
+              >
                 <el-option
                   v-for="item in sendList"
                   :key="item.id"
@@ -95,15 +137,20 @@
                   :value="item.id"
                 />
               </el-select>
-
             </el-form-item>
           </el-col>
         </el-row>
         <el-form-item>
-          <el-button type="primary" @click="save">{{ $t('button.submit') }}</el-button>
-          <el-button @click.native="formVisible = false">{{ $t('button.cancel') }}</el-button>
+          <el-button
+            type="primary"
+            @click="save"
+          >
+            {{ $t('button.submit') }}
+          </el-button>
+          <el-button @click.native="formVisible = false">
+            {{ $t('button.cancel') }}
+          </el-button>
         </el-form-item>
-
       </el-form>
     </el-dialog>
   </div>

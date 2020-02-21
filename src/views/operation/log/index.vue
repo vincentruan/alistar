@@ -23,10 +23,18 @@
           />
         </el-col>
         <el-col :span="4">
-          <el-input v-model="listQuery.logName" size="mini" placeholder="日志名称" />
+          <el-input
+            v-model="listQuery.logName"
+            size="mini"
+            placeholder="日志名称"
+          />
         </el-col>
         <el-col :span="4">
-          <el-select v-model="listQuery.logType" size="mini" placeholder="日志类型">
+          <el-select
+            v-model="listQuery.logType"
+            size="mini"
+            placeholder="日志类型"
+          >
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -36,18 +44,50 @@
           </el-select>
         </el-col>
         <el-col :span="8">
-          <el-button type="success" size="mini" icon="el-icon-search" @click.native="search">{{ $t('button.search') }}</el-button>
-          <el-button type="primary" size="mini" icon="el-icon-refresh" @click.native="reset">{{ $t('button.reset') }}</el-button>
-          <el-button type="danger" size="mini" icon="el-icon-delete" @click.native="clear">{{ $t('button.clear') }}</el-button>
+          <el-button
+            type="success"
+            size="mini"
+            icon="el-icon-search"
+            @click.native="search"
+          >
+            {{ $t('button.search') }}
+          </el-button>
+          <el-button
+            type="primary"
+            size="mini"
+            icon="el-icon-refresh"
+            @click.native="reset"
+          >
+            {{ $t('button.reset') }}
+          </el-button>
+          <el-button
+            type="danger"
+            size="mini"
+            icon="el-icon-delete"
+            @click.native="clear"
+          >
+            {{ $t('button.clear') }}
+          </el-button>
         </el-col>
       </el-row>
       <br>
     </div>
 
-    <el-table v-loading="listLoading" :data="list" element-loading-text="Loading" border fit highlight-current-row>
+    <el-table
+      v-loading="listLoading"
+      :data="list"
+      element-loading-text="Loading"
+      border
+      fit
+      highlight-current-row
+    >
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-form label-position="left" inline class="flash-table-expand">
+          <el-form
+            label-position="left"
+            inline
+            class="flash-table-expand"
+          >
             <el-form-item label="日志类型">
               <span>{{ props.row.logtype }}</span>
             </el-form-item>
@@ -102,7 +142,6 @@
       @prev-click="fetchPrev"
       @next-click="fetchNext"
     />
-
   </div>
 </template>
 

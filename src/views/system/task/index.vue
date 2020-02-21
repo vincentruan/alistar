@@ -3,19 +3,58 @@
     <div class="block">
       <el-row :gutter="20">
         <el-col :span="6">
-          <el-input v-model="listQuery.name" size="mini" placeholder="请输入任务名" />
+          <el-input
+            v-model="listQuery.name"
+            size="mini"
+            placeholder="请输入任务名"
+          />
         </el-col>
         <el-col :span="6">
-          <el-button type="success" size="mini" icon="el-icon-search" @click.native="search">{{ $t('button.search') }}</el-button>
-          <el-button type="primary" size="mini" icon="el-icon-refresh" @click.native="reset">{{ $t('button.reset') }}</el-button>
+          <el-button
+            type="success"
+            size="mini"
+            icon="el-icon-search"
+            @click.native="search"
+          >
+            {{ $t('button.search') }}
+          </el-button>
+          <el-button
+            type="primary"
+            size="mini"
+            icon="el-icon-refresh"
+            @click.native="reset"
+          >
+            {{ $t('button.reset') }}
+          </el-button>
         </el-col>
       </el-row>
       <br>
       <el-row>
         <el-col :span="24">
-          <el-button type="success" size="mini" icon="el-icon-plus" @click.native="add">{{ $t('button.add') }}</el-button>
-          <el-button type="primary" size="mini" icon="el-icon-edit" @click.native="edit">{{ $t('button.edit') }}</el-button>
-          <el-button type="danger" size="mini" icon="el-icon-delete" @click.native="remove">{{ $t('button.delete') }}</el-button>
+          <el-button
+            type="success"
+            size="mini"
+            icon="el-icon-plus"
+            @click.native="add"
+          >
+            {{ $t('button.add') }}
+          </el-button>
+          <el-button
+            type="primary"
+            size="mini"
+            icon="el-icon-edit"
+            @click.native="edit"
+          >
+            {{ $t('button.edit') }}
+          </el-button>
+          <el-button
+            type="danger"
+            size="mini"
+            icon="el-icon-delete"
+            @click.native="remove"
+          >
+            {{ $t('button.delete') }}
+          </el-button>
         </el-col>
       </el-row>
     </div>
@@ -34,7 +73,10 @@
           {{ scope.row.name }}
         </template>
       </el-table-column>
-      <el-table-column label="执行类" width="300">
+      <el-table-column
+        label="执行类"
+        width="300"
+      >
         <template slot-scope="scope">
           {{ scope.row.jobClass }}
         </template>
@@ -62,23 +104,36 @@
           {{ scope.row.execResult }}
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="200">
+      <el-table-column
+        label="操作"
+        width="200"
+      >
         <template slot-scope="scope">
-          <el-button icon="el-icon-log" size="mini" @click.native="viewLog(scope.row.id)">查看日志</el-button>
+          <el-button
+            icon="el-icon-log"
+            size="mini"
+            @click.native="viewLog(scope.row.id)"
+          >
+            查看日志
+          </el-button>
           <el-button
             v-if="scope.row.disabled===true"
             type="success"
             icon="el-icon-log"
             size="mini"
             @click.native="enable(scope.row.id)"
-          >启用</el-button>
+          >
+            启用
+          </el-button>
           <el-button
             v-if="scope.row.disabled===false"
             type="danger"
             icon="el-icon-log"
             size="mini"
             @click.native="disable(scope.row.id)"
-          >禁用</el-button>
+          >
+            禁用
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -88,41 +143,72 @@
       :visible.sync="formVisible"
       width="70%"
     >
-      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+      <el-form
+        ref="form"
+        :model="form"
+        :rules="rules"
+        label-width="120px"
+      >
         <el-row>
           <el-col :span="12">
-            <el-form-item label="任务名" prop="name">
+            <el-form-item
+              label="任务名"
+              prop="name"
+            >
               <el-input v-model="form.name" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="定时规则" prop="cron">
+            <el-form-item
+              label="定时规则"
+              prop="cron"
+            >
               <el-input v-model="form.cron" />
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
-            <el-form-item label="执行类" prop="jobClass">
-              <el-input v-model="form.jobClass" type="textarea" />
+            <el-form-item
+              label="执行类"
+              prop="jobClass"
+            >
+              <el-input
+                v-model="form.jobClass"
+                type="textarea"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="任务说明" prop="cfgDesc">
-              <el-input v-model="form.note" type="textarea" />
+            <el-form-item
+              label="任务说明"
+              prop="cfgDesc"
+            >
+              <el-input
+                v-model="form.note"
+                type="textarea"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item label="执行参数">
-              <el-input v-model="form.data" type="textarea" />
+              <el-input
+                v-model="form.data"
+                type="textarea"
+              />
             </el-form-item>
           </el-col>
-
         </el-row>
         <el-form-item>
-          <el-button type="primary" @click="save">{{ $t('button.submit') }}</el-button>
-          <el-button @click.native="formVisible = false">{{ $t('button.cancel') }}</el-button>
+          <el-button
+            type="primary"
+            @click="save"
+          >
+            {{ $t('button.submit') }}
+          </el-button>
+          <el-button @click.native="formVisible = false">
+            {{ $t('button.cancel') }}
+          </el-button>
         </el-form-item>
-
       </el-form>
     </el-dialog>
   </div>

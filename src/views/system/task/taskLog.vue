@@ -3,12 +3,24 @@
     <div class="block">
       <el-row>
         <el-col :span="24">
-          <el-button icon="el-icon-back" size="mini" @click.native="back">{{ $t('button.back') }}</el-button>
+          <el-button
+            icon="el-icon-back"
+            size="mini"
+            @click.native="back"
+          >
+            {{ $t('button.back') }}
+          </el-button>
         </el-col>
       </el-row>
     </div>
-    <el-table v-loading="listLoading" :data="list" element-loading-text="Loading" border fit highlight-current-row>
-
+    <el-table
+      v-loading="listLoading"
+      :data="list"
+      element-loading-text="Loading"
+      border
+      fit
+      highlight-current-row
+    >
       <el-table-column label="任务名">
         <template slot-scope="scope">
           {{ scope.row.name }}
@@ -29,7 +41,6 @@
           {{ scope.row.jobExecption }}
         </template>
       </el-table-column>
-
     </el-table>
 
     <el-pagination

@@ -112,7 +112,7 @@ export default {
     },
     add() {
       this.resetForm()
-      this.formTitle = '添加消息模板',
+      this.formTitle = '添加消息模板'
       this.formVisible = true
       this.isAdd = true
     },

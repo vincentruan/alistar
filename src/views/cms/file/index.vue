@@ -3,16 +3,33 @@
     <div class="block">
       <el-row :gutter="20">
         <el-col :span="6">
-          <el-input v-model="listQuery.originalFileName" size="mini" placeholder="文件名" />
+          <el-input
+            v-model="listQuery.originalFileName"
+            size="mini"
+            placeholder="文件名"
+          />
         </el-col>
 
         <el-col :span="6">
-          <el-button type="success" size="mini" icon="el-icon-search" @click.native="search">{{ $t('button.search') }}</el-button>
-          <el-button type="primary" size="mini" icon="el-icon-refresh" @click.native="reset">{{ $t('button.reset') }}</el-button>
+          <el-button
+            type="success"
+            size="mini"
+            icon="el-icon-search"
+            @click.native="search"
+          >
+            {{ $t('button.search') }}
+          </el-button>
+          <el-button
+            type="primary"
+            size="mini"
+            icon="el-icon-refresh"
+            @click.native="reset"
+          >
+            {{ $t('button.reset') }}
+          </el-button>
         </el-col>
       </el-row>
       <br>
-
     </div>
 
     <el-table
@@ -24,7 +41,6 @@
       highlight-current-row
       @current-change="handleCurrentChange"
     >
-
       <el-table-column label="ID">
         <template slot-scope="scope">
           {{ scope.row.id }}
@@ -42,10 +58,15 @@
       </el-table-column>
       <el-table-column labe="下载">
         <template slot-scope="scope">
-          <el-button icon="el-icon-log" size="mini" @click.native="download(scope.row.id,scope.row.originalFileName)">下载</el-button>
+          <el-button
+            icon="el-icon-log"
+            size="mini"
+            @click.native="download(scope.row.id,scope.row.originalFileName)"
+          >
+            下载
+          </el-button>
         </template>
       </el-table-column>
-
     </el-table>
 
     <el-pagination
@@ -59,7 +80,6 @@
       @prev-click="fetchPrev"
       @next-click="fetchNext"
     />
-
   </div>
 </template>
 

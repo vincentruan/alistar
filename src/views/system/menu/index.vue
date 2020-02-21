@@ -1,7 +1,14 @@
 <template>
   <div class="app-container">
     <div class="block">
-      <el-button type="success" size="mini" icon="el-icon-plus" @click.native="add">{{ $t('button.add') }}</el-button>
+      <el-button
+        type="success"
+        size="mini"
+        icon="el-icon-plus"
+        @click.native="add"
+      >
+        {{ $t('button.add') }}
+      </el-button>
     </div>
 
     <tree-table
@@ -10,10 +17,14 @@
       highlight-current-row
       border
     >
-
       <el-table-column label="名称">
         <template slot-scope="scope">
-          <el-button type="text" @click="edit(scope.row)">{{ scope.row.name }}</el-button>
+          <el-button
+            type="text"
+            @click="edit(scope.row)"
+          >
+            {{ scope.row.name }}
+          </el-button>
         </template>
       </el-table-column>
       <el-table-column label="编码">
@@ -53,10 +64,14 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="text" @click="remove(scope.row)">删除</el-button>
+          <el-button
+            type="text"
+            @click="remove(scope.row)"
+          >
+            删除
+          </el-button>
         </template>
       </el-table-column>
-
     </tree-table>
 
     <el-dialog
@@ -64,50 +79,85 @@
       :visible.sync="formVisible"
       width="70%"
     >
-      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+      <el-form
+        ref="form"
+        :model="form"
+        :rules="rules"
+        label-width="120px"
+      >
         <el-row>
           <el-col :span="12">
-            <el-form-item label="名称" prop="name">
-              <el-input v-model="form.name" minlength="1" />
+            <el-form-item
+              label="名称"
+              prop="name"
+            >
+              <el-input
+                v-model="form.name"
+                minlength="1"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="请求地址" prop="url">
-              <el-input v-model="form.url" minlength="1" />
+            <el-form-item
+              label="请求地址"
+              prop="url"
+            >
+              <el-input
+                v-model="form.url"
+                minlength="1"
+              />
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="是否是菜单">
               <el-radio-group v-model="form.ismenu">
-                <el-radio :label="1">是</el-radio>
-                <el-radio :label="0">否</el-radio>
+                <el-radio :label="1">
+                  是
+                </el-radio>
+                <el-radio :label="0">
+                  否
+                </el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="是否启用">
               <el-radio-group v-model="form.status">
-                <el-radio :label="1">是</el-radio>
-                <el-radio :label="0">否</el-radio>
+                <el-radio :label="1">
+                  是
+                </el-radio>
+                <el-radio :label="0">
+                  否
+                </el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="菜单编号" prop="code">
+            <el-form-item
+              label="菜单编号"
+              prop="code"
+            >
               <el-input v-model="form.code" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="组件" prop="num">
+            <el-form-item
+              label="组件"
+              prop="num"
+            >
               <el-input v-model="form.component" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="是否隐藏">
               <el-radio-group v-model="form.hidden">
-                <el-radio :label="true">是</el-radio>
-                <el-radio :label="false">否</el-radio>
+                <el-radio :label="true">
+                  是
+                </el-radio>
+                <el-radio :label="false">
+                  否
+                </el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -117,8 +167,14 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="排序" prop="num">
-              <el-input v-model="form.num" type="number" />
+            <el-form-item
+              label="排序"
+              prop="num"
+            >
+              <el-input
+                v-model="form.num"
+                type="number"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -138,14 +194,19 @@
                 class="input-tree"
                 @node-click="handleNodeClick"
               />
-
             </el-form-item>
           </el-col>
-
         </el-row>
         <el-form-item>
-          <el-button type="primary" @click="save">{{ $t('button.submit') }}</el-button>
-          <el-button @click.native="formVisible = false">{{ $t('button.cancel') }}</el-button>
+          <el-button
+            type="primary"
+            @click="save"
+          >
+            {{ $t('button.submit') }}
+          </el-button>
+          <el-button @click.native="formVisible = false">
+            {{ $t('button.cancel') }}
+          </el-button>
         </el-form-item>
       </el-form>
     </el-dialog>

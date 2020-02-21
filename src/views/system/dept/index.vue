@@ -1,7 +1,14 @@
 <template>
   <div class="app-container">
     <div class="block">
-      <el-button type="success" size="mini" icon="el-icon-plus" @click.native="add">{{ $t('button.add') }}</el-button>
+      <el-button
+        type="success"
+        size="mini"
+        icon="el-icon-plus"
+        @click.native="add"
+      >
+        {{ $t('button.add') }}
+      </el-button>
     </div>
 
     <tree-table
@@ -12,8 +19,12 @@
     >
       <el-table-column label="简称">
         <template slot-scope="scope">
-          <el-button type="text" @click="edit(scope.row)">{{ scope.row.simplename }}</el-button>
-
+          <el-button
+            type="text"
+            @click="edit(scope.row)"
+          >
+            {{ scope.row.simplename }}
+          </el-button>
         </template>
       </el-table-column>
       <el-table-column label="全称">
@@ -28,7 +39,12 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="text" @click="remove(scope.row)">删除</el-button>
+          <el-button
+            type="text"
+            @click="remove(scope.row)"
+          >
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </tree-table>
@@ -38,22 +54,45 @@
       :visible.sync="formVisible"
       width="70%"
     >
-      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+      <el-form
+        ref="form"
+        :model="form"
+        :rules="rules"
+        label-width="120px"
+      >
         <el-row>
           <el-col :span="12">
-            <el-form-item label="名称" prop="simplename">
-              <el-input v-model="form.simplename" minlength="1" />
+            <el-form-item
+              label="名称"
+              prop="simplename"
+            >
+              <el-input
+                v-model="form.simplename"
+                minlength="1"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="全称" prop="fullname">
-              <el-input v-model="form.fullname" minlength="1" />
+            <el-form-item
+              label="全称"
+              prop="fullname"
+            >
+              <el-input
+                v-model="form.fullname"
+                minlength="1"
+              />
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
-            <el-form-item label="排序" prop="num">
-              <el-input v-model="form.num" type="number" />
+            <el-form-item
+              label="排序"
+              prop="num"
+            >
+              <el-input
+                v-model="form.num"
+                type="number"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -73,14 +112,19 @@
                 class="input-tree"
                 @node-click="handleNodeClick"
               />
-
             </el-form-item>
           </el-col>
-
         </el-row>
         <el-form-item>
-          <el-button type="primary" @click="save">{{ $t('button.submit') }}</el-button>
-          <el-button @click.native="formVisible = false">{{ $t('button.cancel') }}</el-button>
+          <el-button
+            type="primary"
+            @click="save"
+          >
+            {{ $t('button.submit') }}
+          </el-button>
+          <el-button @click.native="formVisible = false">
+            {{ $t('button.cancel') }}
+          </el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
