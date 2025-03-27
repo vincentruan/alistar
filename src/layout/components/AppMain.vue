@@ -11,18 +11,16 @@
   </section>
 </template>
 
-<script>
-export default {
-  name: 'AppMain',
-  computed: {
-    cachedViews() {
-      return this.$store.state.tagsView.cachedViews
-    },
-    key() {
-      return this.$route.fullPath
-    }
-  }
-}
+<script setup>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
+
+const store = useStore()
+const route = useRoute()
+
+const cachedViews = computed(() => store.state.tagsView.cachedViews)
+const key = computed(() => route.fullPath)
 </script>
 
 <style lang="scss" scoped>

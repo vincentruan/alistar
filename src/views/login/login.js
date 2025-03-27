@@ -1,73 +1,97 @@
-
+import { ref, reactive, onMounted } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { isvalidUsername } from '@/utils/validate'
 import LangSelect from '@/components/LangSelect'
+
 export default {
   name: 'login',
   components: { LangSelect },
-  data() {
+  setup() {
+    const store = useStore()
+    const router = useRouter()
+    const route = useRoute()
+    const { t } = useI18n()
+
+    const loginForm = reactive({
+      username: '',
+      password: ''
+    })
+
+    const loading = ref(false)
+    const pwdType = ref('password')
+    const redirect = ref('/')
+    const loginFormRef = ref(null)
+
     const validateUsername = (rule, value, callback) => {
       if (!isvalidUsername(value)) {
-        callback(new Error(this.$t('login.errorAccount')))
+        callback(new Error(t('login.errorAccount')))
       } else {
         callback()
       }
     }
+
     const validatePassword = (rule, value, callback) => {
       if (value.length < 5) {
-        callback(new Error(this.$t('login.errorPassword')))
+        callback(new Error(t('login.errorPassword')))
       } else {
         callback()
       }
     }
-    return {
-      loginForm: {
-        username: '',
-        password: ''
-      },
-      loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
-      },
-      loading: false,
-      pwdType: 'password',
-      redirect: '/'
+
+    const loginRules = {
+      username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+      password: [{ required: true, trigger: 'blur', validator: validatePassword }]
     }
-  },
-  mounted() {
-    this.init()
-  },
-  methods: {
-    init() {
-      const redirect = this.$route.query.redirect
-      console.log('redirect', redirect)
-      if (redirect) {
-        this.redirect = redirect
+
+    const init = () => {
+      const redirectQuery = route.query.redirect
+      console.log('redirect', redirectQuery)
+      if (redirectQuery) {
+        redirect.value = redirectQuery
       }
-    },
-    showPwd() {
-      if (this.pwdType === 'password') {
-        this.pwdType = ''
+    }
+
+    const showPwd = () => {
+      if (pwdType.value === 'password') {
+        pwdType.value = ''
       } else {
-        this.pwdType = 'password'
+        pwdType.value = 'password'
       }
-    },
-    handleLogin() {
-      this.$refs.loginForm.validate(valid => {
+    }
+
+    const handleLogin = () => {
+      loginFormRef.value.validate(valid => {
         if (valid) {
-          this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.loading = false
-            this.$router.push({ path: this.redirect })
+          loading.value = true
+          store.dispatch('user/login', loginForm).then(() => {
+            loading.value = false
+            router.push({ path: redirect.value })
           }).catch((err) => {
             if (err) {
               console.log(err.stack)
             }
-            this.loading = false
+            loading.value = false
           })
         } else {
           return false
         }
       })
+    }
+
+    onMounted(() => {
+      init()
+    })
+
+    return {
+      loginForm,
+      loginRules,
+      loading,
+      pwdType,
+      loginFormRef,
+      showPwd,
+      handleLogin
     }
   }
 }

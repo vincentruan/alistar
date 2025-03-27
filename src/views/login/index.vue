@@ -1,14 +1,14 @@
 <template>
   <div
     class="login-container"
-    style=" background-image: url(/img/bg.jpg);"
+    style="background-image: url(/img/bg.jpg);"
   >
     <el-form
-      ref="loginForm"
+      ref="loginFormRef"
       :model="loginForm"
       :rules="loginRules"
       class="login-form"
-      auto-complete="on"
+      autocomplete="on"
       label-position="left"
     >
       <div class="title-container">
@@ -27,7 +27,7 @@
           :placeholder="$t('login.username')"
           name="username"
           type="text"
-          auto-complete="on"
+          autocomplete="on"
         />
       </el-form-item>
 
@@ -40,8 +40,8 @@
           :type="pwdType"
           :placeholder="$t('login.password')"
           name="password"
-          auto-complete="on"
-          @keyup.enter.native="handleLogin"
+          autocomplete="on"
+          @keyup.enter="handleLogin"
         />
         <span
           class="show-pwd"
@@ -55,7 +55,7 @@
         :loading="loading"
         type="primary"
         style="width:100%;margin-bottom:30px;"
-        @click.native.prevent="handleLogin"
+        @click="handleLogin"
       >
         {{ $t('login.logIn') }}
       </el-button>
@@ -74,5 +74,50 @@
   </div>
 </template>
 
-<script src="./login.js"></script>
+<script setup>
+import { ref, reactive } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
+import LangSelect from '@/components/LangSelect'
+import { getToken } from '@/utils/auth'
+
+const store = useStore()
+const router = useRouter()
+
+const loginFormRef = ref(null)
+const loading = ref(false)
+const pwdType = ref('password')
+
+const loginForm = reactive({
+  username: '',
+  password: ''
+})
+
+const loginRules = {
+  username: [{ required: true, trigger: 'blur', message: 'Please input username' }],
+  password: [{ required: true, trigger: 'blur', message: 'Please input password' }]
+}
+
+const showPwd = () => {
+  pwdType.value = pwdType.value === 'password' ? '' : 'password'
+}
+
+const handleLogin = () => {
+  loginFormRef.value.validate(async valid => {
+    if (valid) {
+      loading.value = true
+      try {
+        await store.dispatch('user/login', loginForm)
+        router.push({ path: '/' })
+      } catch (error) {
+        console.error('Login failed:', error)
+      } finally {
+        loading.value = false
+      }
+    }
+  })
+}
+</script>
+
 <style rel="stylesheet/scss" lang="scss" src="./login.scss"></style>

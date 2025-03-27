@@ -26,39 +26,28 @@
   </div>
 </template>
 
-<script>
-import { mapGetters } from 'vuex'
+<script setup>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
 import Logo from './Logo'
 import SidebarItem from './SidebarItem'
 import variables from '@/styles/variables.scss'
 
-export default {
-  components: { SidebarItem, Logo },
-  computed: {
-    ...mapGetters([
-      'sidebar'
-    ]),
-    routes() {
-      return this.$store.state.menu.routes
-    },
-    activeMenu() {
-      const route = this.$route
-      const { meta, path } = route
-      // if st path, the sidebar will highlight the path you sete
-      if (meta.activeMenu) {
-        return meta.activeMenu
-      }
-      return path
-    },
-    showLogo() {
-      return this.$store.state.settings.sidebarLogo
-    },
-    variables() {
-      return variables
-    },
-    isCollapse() {
-      return !this.sidebar.opened
-    }
+const store = useStore()
+const route = useRoute()
+
+const sidebar = computed(() => store.getters.sidebar)
+const routes = computed(() => store.state.menu.routes)
+const showLogo = computed(() => store.state.settings.sidebarLogo)
+const isCollapse = computed(() => !sidebar.value.opened)
+
+const activeMenu = computed(() => {
+  const { meta, path } = route
+  // if set path, the sidebar will highlight the path you set
+  if (meta.activeMenu) {
+    return meta.activeMenu
   }
-}
+  return path
+})
 </script>

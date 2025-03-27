@@ -19,46 +19,34 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 import { Navbar, Sidebar, AppMain, TagsView } from './components'
-import ResizeMixin from './mixin/ResizeHandler'
+import useResizeHandler from './mixin/ResizeHandler'
 
-export default {
-  name: 'Layout',
-  components: {
-    Navbar,
-    Sidebar,
-    AppMain,
-    TagsView
-  },
-  mixins: [ResizeMixin],
-  computed: {
-    sidebar() {
-      return this.$store.state.app.sidebar
-    },
-    device() {
-      return this.$store.state.app.device
-    },
-    fixedHeader() {
-      return this.$store.state.settings.fixedHeader
-    },
-    needTagsView() {
-      return this.$store.state.settings.tagsView
-    },
-    classObj() {
-      return {
-        hideSidebar: !this.sidebar.opened,
-        openSidebar: this.sidebar.opened,
-        withoutAnimation: this.sidebar.withoutAnimation,
-        mobile: this.device === 'mobile'
-      }
-    }
-  },
-  methods: {
-    handleClickOutside() {
-      this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
-    }
-  }
+// 使用组合式 API
+const store = useStore()
+
+// 使用 resize handler
+useResizeHandler()
+
+// 计算属性
+const sidebar = computed(() => store.state.app.sidebar)
+const device = computed(() => store.state.app.device)
+const fixedHeader = computed(() => store.state.settings.fixedHeader)
+const needTagsView = computed(() => store.state.settings.tagsView)
+
+const classObj = computed(() => ({
+  hideSidebar: !sidebar.value.opened,
+  openSidebar: sidebar.value.opened,
+  withoutAnimation: sidebar.value.withoutAnimation,
+  mobile: device.value === 'mobile'
+}))
+
+// 方法
+const handleClickOutside = () => {
+  store.dispatch('app/closeSideBar', { withoutAnimation: false })
 }
 </script>
 

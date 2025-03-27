@@ -5,27 +5,27 @@
         <el-col :span="24">
           <el-button
             type="success"
-            size="mini"
-            icon="el-icon-plus"
-            @click.native="add"
+            size="small"
+            @click="add"
           >
-            {{ $t('button.add') }}
+            <el-icon><Plus /></el-icon>
+            添加
           </el-button>
           <el-button
             type="primary"
-            size="mini"
-            icon="el-icon-edit"
-            @click.native="edit"
+            size="small"
+            @click="edit"
           >
-            {{ $t('button.edit') }}
+            <el-icon><Edit /></el-icon>
+            编辑
           </el-button>
           <el-button
             type="danger"
-            size="mini"
-            icon="el-icon-delete"
-            @click.native="remove"
+            size="small"
+            @click="remove"
           >
-            {{ $t('button.delete') }}
+            <el-icon><Delete /></el-icon>
+            删除
           </el-button>
         </el-col>
       </el-row>
@@ -40,25 +40,25 @@
       @current-change="handleCurrentChange"
     >
       <el-table-column label="ID">
-        <template slot-scope="scope">
+        <template #default="scope">
           {{ scope.row.id }}
         </template>
       </el-table-column>
       <el-table-column label="名称">
-        <template slot-scope="scope">
+        <template #default="scope">
           {{ scope.row.name }}
         </template>
       </el-table-column>
       <el-table-column label="编码">
-        <template slot-scope="scope">
+        <template #default="scope">
           {{ scope.row.code }}
         </template>
       </el-table-column>
     </el-table>
 
     <el-dialog
+      v-model="formVisible"
       :title="formTitle"
-      :visible.sync="formVisible"
       width="70%"
     >
       <el-form
@@ -96,10 +96,10 @@
             type="primary"
             @click="save"
           >
-            {{ $t('button.submit') }}
+            提交
           </el-button>
-          <el-button @click.native="formVisible = false">
-            {{ $t('button.cancel') }}
+          <el-button @click="formVisible = false">
+            取消
           </el-button>
         </el-form-item>
       </el-form>
@@ -107,7 +107,129 @@
   </div>
 </template>
 
-<script src="./channel.js"></script>
+<script setup>
+import { ref, reactive, computed, onMounted } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { Plus, Edit, Delete } from '@element-plus/icons-vue'
+import { remove, getList, save } from '@/api/cms/channel'
+
+const formVisible = ref(false)
+const formTitle = ref('添加栏目')
+const deptList = ref([])
+const isAdd = ref(true)
+const form = reactive({
+  id: '',
+  name: '',
+  code: ''
+})
+const list = ref(null)
+const listLoading = ref(true)
+const selRow = ref({})
+
+const rules = computed(() => ({
+  name: [
+    { required: true, message: '名称不能为空', trigger: 'blur' }
+  ],
+  code: [
+    { required: true, message: '编码不能为空', trigger: 'blur' }
+  ]
+}))
+
+const init = () => {
+  fetchData()
+}
+
+const fetchData = async () => {
+  listLoading.value = true
+  try {
+    const response = await getList()
+    list.value = response.data
+  } finally {
+    listLoading.value = false
+  }
+}
+
+const handleCurrentChange = (currentRow) => {
+  selRow.value = currentRow
+}
+
+const resetForm = () => {
+  Object.assign(form, {
+    id: '',
+    name: '',
+    code: ''
+  })
+}
+
+const add = () => {
+  resetForm()
+  formTitle.value = '添加栏目'
+  formVisible.value = true
+  isAdd.value = true
+}
+
+const save = async () => {
+  try {
+    await save({
+      id: form.id,
+      name: form.name,
+      code: form.code
+    })
+    ElMessage({
+      message: '操作成功',
+      type: 'success'
+    })
+    await fetchData()
+    formVisible.value = false
+  } catch (error) {
+    console.error('Save failed:', error)
+  }
+}
+
+const checkSel = () => {
+  if (selRow.value && selRow.value.id) {
+    return true
+  }
+  ElMessage({
+    message: '请选择一条记录',
+    type: 'warning'
+  })
+  return false
+}
+
+const edit = () => {
+  if (checkSel()) {
+    isAdd.value = false
+    Object.assign(form, selRow.value)
+    formTitle.value = '编辑栏目'
+    formVisible.value = true
+  }
+}
+
+const remove = async () => {
+  if (checkSel()) {
+    try {
+      await ElMessageBox.confirm('确认删除该记录吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+      await remove(selRow.value.id)
+      ElMessage({
+        message: '操作成功',
+        type: 'success'
+      })
+      await fetchData()
+    } catch (error) {
+      console.error('Remove failed:', error)
+    }
+  }
+}
+
+onMounted(() => {
+  init()
+})
+</script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "src/styles/common.scss";

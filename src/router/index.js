@@ -1,7 +1,4 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-
-Vue.use(Router)
+import { createRouter, createWebHistory } from 'vue-router'
 
 /* Layout */
 import Layout from '@/layout'
@@ -64,9 +61,7 @@ export const constantRoutes = [
         path: 'profile',
         name: '个人资料',
         component: () => import('@/views/account/profile.vue'),
-
         meta: { title: '个人资料' }
-
       },
       {
         path: 'timeline',
@@ -74,7 +69,6 @@ export const constantRoutes = [
         component: () => import('@/views/account/timeline.vue'),
         hidden: true,
         meta: { title: '最近活动' }
-
       },
       {
         path: 'updatePwd',
@@ -85,18 +79,20 @@ export const constantRoutes = [
       }
     ]
   }
-
 ]
 
-const createRouter = () => new Router({
+const router = createRouter({
+  history: createWebHistory(),
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
 })
 
-const router = createRouter()
-
 export function resetRouter() {
-  const newRouter = createRouter()
+  const newRouter = createRouter({
+    history: createWebHistory(),
+    scrollBehavior: () => ({ y: 0 }),
+    routes: constantRoutes
+  })
   router.matcher = newRouter.matcher
 }
 

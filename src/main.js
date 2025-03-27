@@ -1,14 +1,11 @@
-import Vue from 'vue'
-
+import { createApp } from 'vue'
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
-
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
-
 import ECharts from 'vue-echarts/components/ECharts.vue'
 import '@/styles/index.scss' // global css
 
-import App from './App'
+import App from './App.vue'
 import store from './store'
 import router from './router'
 import i18n from './lang' // Internationalization
@@ -24,16 +21,16 @@ import '@/permission' // permission control
  * please remove it before going online! ! !
  */
 
-// set ElementUI lang to EN
-Vue.use(ElementUI, { i18n: (key, value) => i18n.t(key, value) })
+const app = createApp(App)
 
-Vue.component('v-chart', ECharts)
-Vue.config.productionTip = false
+// set ElementPlus lang to EN
+app.use(ElementPlus, { i18n: (key, value) => i18n.global.t(key, value) })
 
-new Vue({
-  el: '#app',
-  router,
-  store,
-  i18n,
-  render: h => h(App)
-})
+app.component('v-chart', ECharts)
+app.config.productionTip = false
+
+app.use(router)
+app.use(store)
+app.use(i18n)
+
+app.mount('#app')

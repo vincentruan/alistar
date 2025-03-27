@@ -5,7 +5,7 @@
         <el-col :span="6">
           <el-input
             v-model="listQuery.title"
-            size="mini"
+            size="small"
             placeholder="标题"
           />
         </el-col>
@@ -13,19 +13,19 @@
         <el-col :span="6">
           <el-button
             type="success"
-            size="mini"
-            icon="el-icon-search"
-            @click.native="search"
+            size="small"
+            @click="search"
           >
-            {{ $t('button.search') }}
+            <el-icon><Search /></el-icon>
+            搜索
           </el-button>
           <el-button
             type="primary"
-            size="mini"
-            icon="el-icon-refresh"
-            @click.native="reset"
+            size="small"
+            @click="reset"
           >
-            {{ $t('button.reset') }}
+            <el-icon><Refresh /></el-icon>
+            重置
           </el-button>
         </el-col>
       </el-row>
@@ -34,19 +34,19 @@
         <el-col :span="24">
           <el-button
             type="success"
-            size="mini"
-            icon="el-icon-plus"
-            @click.native="add"
+            size="small"
+            @click="add"
           >
-            {{ $t('button.add') }}
+            <el-icon><Plus /></el-icon>
+            添加
           </el-button>
           <el-button
             type="danger"
-            size="mini"
-            icon="el-icon-delete"
-            @click.native="remove"
+            size="small"
+            @click="remove"
           >
-            {{ $t('button.delete') }}
+            <el-icon><Delete /></el-icon>
+            删除
           </el-button>
         </el-col>
       </el-row>
@@ -62,27 +62,27 @@
       @current-change="handleCurrentChange"
     >
       <el-table-column label="ID">
-        <template slot-scope="scope">
+        <template #default="scope">
           {{ scope.row.id }}
         </template>
       </el-table-column>
       <el-table-column label="标题">
-        <template slot-scope="scope">
+        <template #default="scope">
           {{ scope.row.title }}
         </template>
       </el-table-column>
       <el-table-column label="类别">
-        <template slot-scope="scope">
+        <template #default="scope">
           {{ scope.row.type }}
         </template>
       </el-table-column>
       <el-table-column label="url">
-        <template slot-scope="scope">
+        <template #default="scope">
           {{ scope.row.url }}
         </template>
       </el-table-column>
       <el-table-column label="图片">
-        <template slot-scope="scope">
+        <template #default="scope">
           <img
             :src="scope.row.img"
             style="width:200px;"
@@ -92,8 +92,8 @@
     </el-table>
 
     <el-dialog
+      v-model="formVisible"
       :title="formTitle"
-      :visible.sync="formVisible"
       width="70%"
     >
       <el-form
@@ -146,13 +146,13 @@
               <el-upload
                 class="upload-demo"
                 drag
-                multiple="false"
+                :multiple="false"
                 :action="uploadUrl"
                 :headers="uploadHeaders"
                 :before-upload="handleBeforeUpload"
                 :on-success="handleUploadSuccess"
               >
-                <i class="el-icon-upload" />
+                <el-icon class="el-icon--upload"><Upload /></el-icon>
                 <div class="el-upload__text">
                   上传图片
                 </div>
@@ -165,10 +165,10 @@
             type="primary"
             @click="save"
           >
-            {{ $t('button.submit') }}
+            提交
           </el-button>
-          <el-button @click.native="formVisible = false">
-            {{ $t('button.cancel') }}
+          <el-button @click="formVisible = false">
+            取消
           </el-button>
         </el-form-item>
       </el-form>
@@ -176,7 +176,193 @@
   </div>
 </template>
 
-<script src="./banner.js"></script>
+<script setup>
+import { ref, reactive, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { ElMessage, ElLoading, ElMessageBox } from 'element-plus'
+import { Search, Refresh, Plus, Delete, Upload } from '@element-plus/icons-vue'
+import { remove, getList, save } from '@/api/cms/banner'
+import { getToken } from '@/utils/auth'
+import { getApiUrl } from '@/utils/utils'
+
+const router = useRouter()
+const uploadUrl = ref('')
+const uploadFileId = ref('')
+const uploadHeaders = reactive({
+  'Authorization': ''
+})
+const loadingInstance = ref(null)
+const formVisible = ref(false)
+const formTitle = ref('添加banner')
+const deptList = ref([])
+const isAdd = ref(true)
+const options = ref([
+  { label: '首页', value: 'index' },
+  { label: '新闻', value: 'news' },
+  { label: '产品', value: 'product' },
+  { label: '解决方案', value: 'solution' },
+  { label: '案例', value: 'case' }
+])
+const form = reactive({
+  id: '',
+  title: '',
+  url: '',
+  img: '',
+  idFile: '',
+  type: 'index'
+})
+const listQuery = reactive({
+  title: undefined
+})
+const list = ref(null)
+const listLoading = ref(true)
+const selRow = ref({})
+
+const rules = computed(() => ({
+  title: [
+    { required: true, message: '标题不能为空', trigger: 'blur' }
+  ],
+  url: [
+    { required: true, message: 'URL不能为空', trigger: 'blur' }
+  ]
+}))
+
+const init = async () => {
+  uploadUrl.value = getApiUrl() + '/file'
+  uploadHeaders['Authorization'] = getToken()
+  await fetchData()
+}
+
+const fetchData = async () => {
+  listLoading.value = true
+  try {
+    const response = await getList(listQuery)
+    list.value = response.data
+    for (const item of list.value) {
+      item.img = getApiUrl() + '/file/getImgStream?idFile=' + item.idFile
+    }
+  } finally {
+    listLoading.value = false
+  }
+}
+
+const search = () => {
+  fetchData()
+}
+
+const reset = () => {
+  listQuery.title = ''
+  fetchData()
+}
+
+const handleFilter = () => {
+  fetchData()
+}
+
+const handleCurrentChange = (currentRow) => {
+  selRow.value = currentRow
+}
+
+const resetForm = () => {
+  Object.assign(form, {
+    id: '',
+    title: '',
+    url: '',
+    idFile: uploadFileId.value,
+    type: ''
+  })
+}
+
+const add = () => {
+  resetForm()
+  formTitle.value = '添加banner'
+  formVisible.value = true
+  isAdd.value = true
+}
+
+const save = async () => {
+  try {
+    await save({
+      id: form.id,
+      title: form.title,
+      url: form.url,
+      idFile: uploadFileId.value,
+      type: form.type
+    })
+    ElMessage({
+      message: '操作成功',
+      type: 'success'
+    })
+    await fetchData()
+    formVisible.value = false
+  } catch (error) {
+    console.error('Save failed:', error)
+  }
+}
+
+const checkSel = () => {
+  if (selRow.value && selRow.value.id) {
+    return true
+  }
+  ElMessage({
+    message: '请选择一条记录',
+    type: 'warning'
+  })
+  return false
+}
+
+const remove = async () => {
+  if (checkSel()) {
+    try {
+      await ElMessageBox.confirm('确认删除该记录吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+      await remove(selRow.value.id)
+      ElMessage({
+        message: '操作成功',
+        type: 'success'
+      })
+      await fetchData()
+    } catch (error) {
+      console.error('Remove failed:', error)
+    }
+  }
+}
+
+const handleBeforeUpload = () => {
+  if (uploadFileId.value !== '') {
+    ElMessage({
+      message: '请选择一条记录',
+      type: 'warning'
+    })
+    return false
+  }
+  loadingInstance.value = ElLoading.service({
+    lock: true,
+    text: '上传中',
+    background: 'rgba(0, 0, 0, 0.7)'
+  })
+}
+
+const handleUploadSuccess = (response) => {
+  loadingInstance.value.close()
+  if (response.code === 20000) {
+    uploadFileId.value = response.data.id
+    form.fileName = response.data.originalFileName
+  } else {
+    ElMessage({
+      message: '上传失败',
+      type: 'error'
+    })
+  }
+}
+
+onMounted(() => {
+  init()
+})
+</script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "src/styles/common.scss";
